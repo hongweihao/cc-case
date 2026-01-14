@@ -28,9 +28,9 @@ argument-hint: review反馈内容（例如，"计划缺少错误处理细节"、
 
 - 查找 `docs/active/[task-name]/` 目录
 - 确认需要修改的文件：
-  - `[task-name]-plan.md` - 战略计划
-  - `[task-name]-context.md` - 关键决策和文件
-  - `[task-name]-tasks.md` - 任务检查清单
+  - `[task-name]-plan.md` - 方案设计文档
+  - `[task-name]-context.md` - 关键决策和进度
+  - `[task-name]-impl.md` - 任务拆解和跟踪
 
 ## 3. 执行迭代修改
 
@@ -76,11 +76,13 @@ argument-hint: review反馈内容（例如，"计划缺少错误处理细节"、
 - 增加风险评估和应对方案
 
 ### 反馈类型2：任务拆分不合理
-**修改文件：** `[task-name]-tasks.md` 和 `[task-name]-plan.md`
+**修改文件：** `[task-name]-impl.md` 和 `[task-name]-plan.md`
 
 **修改内容：**
 - 重新划分任务粒度（过粗则细化，过细则合并）
 - 调整任务顺序和依赖关系
+- 确保任务拆分遵循"对接点优先"原则（API、XXL-Job、MQ Listener、RPC）
+- 每个对接点内部按层级实现：数据层 → 业务层 → 接口层
 - 确保每个任务都有明确的验收标准
 - 同步更新 plan.md 中的实现阶段
 
@@ -94,7 +96,7 @@ argument-hint: review反馈内容（例如，"计划缺少错误处理细节"、
 - 记录发现的技术限制和解决方案
 
 ### 反馈类型4：缺少错误处理
-**修改文件：** `[task-name]-plan.md` 和 `[task-name]-tasks.md`
+**修改文件：** `[task-name]-plan.md` 和 `[task-name]-impl.md`
 
 **修改内容：**
 - 在实现阶段中添加异常处理步骤
@@ -134,20 +136,29 @@ argument-hint: review反馈内容（例如，"计划缺少错误处理细节"、
 
 ### 示例2：细化任务拆分（内容优化）
 
-**Review反馈：** "数据同步任务太粗，需要拆分成更小的步骤"
+**Review反馈：** "数据同步任务太粗，需要按对接点拆分"
 
 **修改操作：**
 ```markdown
-# 在 tasks.md 中找到粗粒度任务
+# 在 impl.md 中找到粗粒度任务
 - [ ] 实现数据同步功能
 
-# 使用 Edit 工具替换为细粒度任务：
-- [ ] 实现增量数据查询（UserSyncRepository.findUpdatedUsers()）
-- [ ] 实现数据转换逻辑（UserSyncService.transformUserData()）
-- [ ] 实现批量更新（UserSyncService.batchUpdateUsers()）
-- [ ] 实现同步状态记录（UserSyncRepository.saveSyncLog()）
+# 使用 Edit 工具替换为按对接点拆分的任务：
+
+## 第 2 阶段：数据同步端点
+
+**端点 2.1：数据同步 API** `POST /api/sync/users`
+- [ ] 实现 UserSyncRepository.findUpdatedUsers()（数据层）
+- [ ] 实现 UserSyncService.syncUsers()（业务层，包含数据转换和批量更新）
+- [ ] 实现 UserSyncController.syncUsers()（接口层）
+- [ ] 提供基于 SpringBoot 的单元测试
+- [ ] 验收：curl -X POST /api/sync/users 返回同步结果
+
+**端点 2.2：数据同步定时任务** `userSyncJob`
+- [ ] 实现 UserSyncService.scheduledSync()（业务层）
+- [ ] 实现 UserSyncJobHandler.execute()（XXL-Job Handler）
 - [ ] 添加同步失败重试机制
-- [ ] 验收：同步1000条数据，成功率99%以上
+- [ ] 验收：手动触发任务，同步1000条数据，成功率99%以上
 ```
 
 ### 示例3：补充技术决策（结构调整）
