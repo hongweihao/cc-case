@@ -52,7 +52,7 @@ docs/archived/[task-name]/   # 已经完成的任务，归档
 - 补充说明
 
 **示例：**
-```markdown
+--- 
 # 帖子管理功能 - 实现方案
 
 ## 1. 需求目标
@@ -107,13 +107,13 @@ CREATE TABLE posts (
 ```
 
 **Redis 缓存设计：**
-- Key: `post:{id}`
+- Key: `{PREFIX}:post:{id}`
 - Value: JSON 格式的帖子信息
 - TTL: 1 小时
 
 **Kafka Topic 设计：**
-- Topic: `post.events`
-- 消息格式: `{"postId": 123, "eventType": "CREATED/UPDATED", "timestamp": 1234567890}`
+- Topic: `POST_CREATED`
+- 消息格式: `{"postId": 123, "timestamp": 1234567890}`
 
 ### 2.4 端点设计
 
@@ -129,7 +129,9 @@ CREATE TABLE posts (
 - 帖子内容需要进行敏感词过滤，使用现有的 ContentFilterService
 - 审核逻辑初期采用简单规则，后续可接入 AI 审核
 - 缓存策略采用 Cache-Aside 模式，写操作时删除缓存
-```  
+
+---
+
   
 ### 2. [task-name]-context.md  
 
@@ -145,7 +147,9 @@ CREATE TABLE posts (
 - 快速恢复说明  
   
 **示例：**
-```markdown
+
+---
+
 # 帖子管理功能 - 上下文
 
 ## 进度（2026-01-13）
@@ -197,9 +201,9 @@ CREATE TABLE posts (
 4. 实现 PostController.getPost()
 5. 验收：curl -X GET /api/posts/1 返回数据
 6. 查看 tasks.md 了解后续阶段（XXL-Job、MQ Listener）
-```  
-  
-**关键：** 每次完成重要工作时都要更新进度部分！
+
+---
+
 
 ### 3. [task-name]-impl.md
 
@@ -235,7 +239,9 @@ CREATE TABLE posts (
 - ✅ 便于增量交付和验证
 
 **示例：**
-```markdown
+
+---
+
 # 帖子管理功能 - 任务拆解
 
 ## 第 1 阶段：基础代码实现 ⏳
@@ -271,7 +277,7 @@ CREATE TABLE posts (
 
 **端点 2.4：帖子更新消息监听** `postUpdateListener`
 - [ ] 实现 PostEventService.handlePostUpdate()（业务层）
-- [ ] 实现 PostUpdateListener.onMessage()（RabbitMQ Listener）
+- [ ] 实现 PostUpdateListener.onMessage() （Kafka Listener）
 - [ ] 提供基于 SpringBoot 的单元测试，发送测试消息
 - [ ] 验收：发送测试消息，监听器正确处理并打印日志
 
@@ -284,7 +290,8 @@ CREATE TABLE posts (
 **运维部署**
 - [ ] 编写部署文档（环境变量、依赖服务、启动命令）
 - [ ] 验收：测试环境部署成功
-```
+
+---
 
 **关键：** 实际执行时，根据进度更新状态指示器（✅/🟡/⏳）和复选框！  
   
