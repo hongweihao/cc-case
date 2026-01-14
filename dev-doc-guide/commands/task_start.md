@@ -42,7 +42,7 @@ $ARGUMENTS
     | YYYY-MM-DD HH:mm | 1.0 | Claude Code | 初始版本创建 |
     ```
 
-**请阅读 dev_doc_guide.md 了解【三文件】任务管理文件结构**
+**请阅读 [dev_doc_guide.md](https://raw.githubusercontent.com/hongweihao/cc-case/refs/heads/main/dev-doc-guide/dev_doc_guide.md) 了解【三文件】任务管理文件结构**
 
 ### 2. 阶段拆解
 
