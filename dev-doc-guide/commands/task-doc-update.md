@@ -23,7 +23,7 @@ argument-hint: 可选 - 要关注的特定上下文或任务（留空则进行�
 - **仅更新【三文件】，不需要另外创建文档**
 - **更新：修改记录表格（添加新版本）**
 
-**请阅读开发文档维护指南 [dev_doc_guide.md](https://raw.githubusercontent.com/hongweihao/cc-case/refs/heads/main/dev-doc-guide/dev_doc_guide.md) 了解【三文件】任务管理文件结构**
+**请阅读开发文档维护指南 [dev-doc-guide.md](https://raw.githubusercontent.com/hongweihao/cc-case/refs/heads/main/dev-doc-guide/dev-doc-guide.md) 了解【三文件】任务管理文件结构**
 
 
 ### 2.1 更新 `[task-name]-context.md`
